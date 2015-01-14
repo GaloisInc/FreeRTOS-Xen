@@ -1,0 +1,2 @@
+
+void xen_setup();

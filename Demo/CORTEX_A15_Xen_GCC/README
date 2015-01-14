@@ -1,0 +1,16 @@
+
+FreeRTOS as Xen ARM Guest
+-------------------------
+
+This directory, together with the ARM7_CA15_Xen port directory, provides a port
+of FreeRTOS for the Cortex A15 ARM processor with support for running as a Xen
+guest operating system.
+
+Features provided this port:
+
+ * Generic Interrupt Controller (GIC) setup
+ * XenStore configuration and management API
+ * Memory page allocator for mapping Xen pages
+ * Minimal C library (in platform/minlibc/)
+ * Xen console support (output only)
+ * Xen inter-domain communication library (platform/libIVC.c)

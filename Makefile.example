@@ -1,0 +1,58 @@
+
+##########################################################
+# Things to customize or override on the command line:
+
+# Where to find the FreeRTOS repository:
+FREERTOS=.../FreeRTOS
+# Where to find your XEN includes
+XEN_PREFIX=/usr
+# Which cross compiler to use
+CROSS_COMPILE=arm-none-eabi-
+
+##########################################################
+
+XEN_INCLUDE=$(XEN_PREFIX)/include 
+FREERTOS_LIB=$(FREERTOS)/Demo/CORTEX_A15_Xen_GCC/FreeRTOS.a
+PORT=$(FREERTOS)/Source/portable/GCC/ARM7_CA15_Xen
+CC=$(CROSS_COMPILE)gcc
+OBJCOPY=$(CROSS_COMPILE)objcopy
+LDSCRIPT=$(FREERTOS)/Demo/CORTEX_A15_Xen_GCC/linker.lds
+LDFLAGS=-nostartfiles -Xlinker
+OPTIMIZE=-O3
+ELFFLAGS=-static -T $(LDSCRIPT)
+CFLAGS= $(DEBUG) $(OPTIMIZE) \
+	-Wall \
+	-Werror \
+	-I $(FREERTOS)/Source/include \
+	-I $(FREERTOS)/Demo/CORTEX_A15_Xen_GCC/include \
+	-I $(FREERTOS)/Demo/CORTEX_A15_Xen_GCC/platform/include \
+	-I $(FREERTOS)/Demo/CORTEX_A15_Xen_GCC/platform/minlibc/include \
+        -I $(FREERTOS)/Demo/Common/include \
+	-I $(PORT)/include \
+	-I $(XEN_INCLUDE) \
+	-D XEN_HAVE_PV_GUEST_ENTRY=1 \
+	-D CA15_XEN_GCC \
+	-mcpu=cortex-a15 \
+	-mfpu=vfpv4 \
+	-fomit-frame-pointer \
+	-fno-strict-aliasing \
+	-nostdlib
+
+# Mark these intermediate files as "secondary" to prevent them from being
+# automatically deleted by 'make'; see also
+# http://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
+.SECONDARY: RTOSDemo.elf
+
+all: RTOSDemo.bin
+
+%.bin: %.elf
+	$(OBJCOPY) $*.elf -O binary $*.bin
+
+%.elf: %.o $(FREERTOS_LIB) Makefile
+	$(CC) $(CFLAGS) $*.o $(FREERTOS_LIB) $(LIBS) $(LDFLAGS) -o$*.elf $(ELFFLAGS)
+
+RTOSDemo.o: %.o : %.c Makefile
+	$(CC) -c $(CFLAGS) $*.c -o $*.o
+
+clean:
+	rm -f *.elf *.bin *.o

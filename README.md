@@ -11,32 +11,17 @@ This FreeRTOS tree provides a port of FreeRTOS for Xen on ARM systems.
 
 Selected elements of the source tree layout are as follows:
 
-```
-  Demo/
-    CORTEX_A15_Xen_GCC/      The root of the build system, including the C
-                             library, drivers, linker script, and Makefile.
-      platform/              Code responsible for integrating with the
-                             hypervisor and paravirtualized services.
-	xen/                 Hypervisor services: grant tables, event channels,
-                             hypercalls, Xenbus.
-	console/             The xen virtual console drivers: the
-			     hypercall-based debug console and the xenbus-based
-                             console.
-	asm/                 Assembly relevant to interacting with the
-                             hypervisor.
-	minlibc/             The minimal C library used by the Xen service
-                             drivers.
-
-  Source/                    The FreeRTOS core, including task scheduler and
-                             other data structure.
-    portable/GCC/            The ARM-specific elements of the port for the GNU
-                             compiler toolchain.
-      ARM7_CA15_Xen/         The ARMv7 Cortex A15 Xen port implementation.
-	asm/                 All assembly for setting up the hardware,
-			     including cache setup, FPU setup, interrupt
-			     handlers, page table management and iMMU setup,
-                             virtual timer setup.
-```
+  * Demo/
+    * CORTEX_A15_Xen_GCC/: The root of the build system, including the C library, drivers, linker script, and Makefile.
+      * platform/: Code responsible for integrating with the hypervisor and paravirtualized services.
+      * xen/: Hypervisor services: grant tables, event channels, hypercalls, Xenbus.
+      * console/: The xen virtual console drivers: the hypercall-based debug console and the xenbus-based console.
+      * asm/: Assembly relevant to interacting with the hypervisor.
+      * minlibc/: The minimal C library used by the Xen service drivers.
+  * Source/: The FreeRTOS core, including task scheduler and other data structure.
+  * portable/GCC/: The ARM-specific elements of the port for the GNU compiler toolchain.
+    * ARM7_CA15_Xen/: The ARMv7 Cortex A15 Xen port implementation.
+    * asm/: All assembly for setting up the hardware, including cache setup, FPU setup, interrupt handlers, page table management and iMMU setup, and virtual timer setup.
 
 Requirements
 ------------

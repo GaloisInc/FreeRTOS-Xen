@@ -41,8 +41,8 @@ Step 1: Building the core
 
 Applications are built with this distribution in two steps:
 
- 1) Build the core of FreeRTOS as a library (`.a`)
- 2) Build your application codebase and link it against the library
+ * Build the core of FreeRTOS as a library (`.a`)
+ * Build your application codebase and link it against the library
 
 The first step requires your cross compiler to be in the PATH and requires the
 presence of Xen development headers to be installed somewhere on your system.

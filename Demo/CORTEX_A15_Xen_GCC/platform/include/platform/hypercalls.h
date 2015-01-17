@@ -4,6 +4,7 @@
  * Copied from XenLinux.
  * 
  * Copyright (c) 2002-2004, K A Fraser
+ * Copyright (c) 2014, Galois, Inc.
  * 
  * 64-bit updates:
  *   Benjamin Liu <benjamin.liu@intel.com>

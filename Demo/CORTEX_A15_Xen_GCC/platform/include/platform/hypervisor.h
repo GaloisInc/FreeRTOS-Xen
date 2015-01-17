@@ -6,6 +6,7 @@
  *
  * Copyright (c) 2002, K A Fraser
  * Copyright (c) 2005, Grzegorz Milos
+ * Copyright (C) 2014, Galois, Inc.
  * Updates: Aravindh Puthiyaparambil <aravindh.puthiyaparambil@unisys.com>
  */
 

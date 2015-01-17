@@ -5,6 +5,7 @@
  * 
  * Copyright (c) 2002-2003, K A Fraser
  * Copyright (c) 2005, Grzegorz Milos, gm281@cam.ac.uk,Intel Research Cambridge
+ * Copyright (c) 2014, Jonathan Daugherty, jtd AT galois.com, Galois, Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to

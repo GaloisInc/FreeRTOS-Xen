@@ -2,6 +2,7 @@
  ****************************************************************************
  * (C) 2003 - Rolf Neugebauer - Intel Research Cambridge
  * (C) 2005 - Grzegorz Milos - Intel Research Cambridge
+ * (C) 2014 - Jonathan Daugherty - Galois, Inc.
  ****************************************************************************
  *
  *        File: events.c

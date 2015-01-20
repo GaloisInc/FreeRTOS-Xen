@@ -5,7 +5,7 @@ FreeRTOS for Xen on ARM
 This FreeRTOS tree provides a port of FreeRTOS for Xen on ARM systems.
 
  * Author: Jonathan Daugherty (jtd AT galois.com), Galois, Inc.
- * Xen version: 4.4+
+ * Xen version: 4.4
  * FreeRTOS version: 7.6.0
  * Supported systems: any ARM system with virtualization extensions
 
@@ -106,6 +106,16 @@ Look for e.g.
   #define DEBUG 0
   #define dprintk if (DEBUG) printk
 ```
+
+Caveats
+-------
+
+At the time of this writing, this port of FreeRTOS works on Xen 4.4, but operation
+in newer versions of Xen is not guaranteed.  In particular, some hardware details
+such as the GIC interface addresses and interrupt numbers are hard-coded, while the
+preferred approach to configuring these settings is to query the Device Tree Blob
+provided by the hypervisor.  Until that is implemented, operation on newer versions
+of Xen is not recommended.
 
 Contributing
 ------------

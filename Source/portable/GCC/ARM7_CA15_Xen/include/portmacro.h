@@ -29,7 +29,7 @@
 #endif
 
 #define portSTACK_GROWTH			( -1 )
-#define portTICK_RATE_MS			( ( portTickType ) 1000 / configTICK_RATE_HZ )
+// #define portTICK_RATE_MS			( ( portTickType ) 1000 / configTICK_RATE_HZ )
 #define portBYTE_ALIGNMENT			8
 
 #define portINTERRUPT_CONTROLLER_CPU_INTERFACE_ADDRESS 		( GICC_BASE )
@@ -111,10 +111,13 @@ uint32_t global_interrupts_disabled(void);
 #define portLONG		long
 #define portSHORT		short
 #define portSTACK_TYPE	unsigned long
-#define portBASE_TYPE	portLONG
-// NB: this was 'unsigned long' and requires further testing.
-typedef uint32_t portTickType;
-#define portMAX_DELAY ( portTickType ) 0xffffffff
+
+typedef portSTACK_TYPE StackType_t;
+typedef long BaseType_t;
+typedef unsigned long UBaseType_t;
+typedef uint32_t TickType_t;
+
+#define portMAX_DELAY ( TickType_t ) 0xffffffff
 
 /*-----------------------------------------------------------*/
 

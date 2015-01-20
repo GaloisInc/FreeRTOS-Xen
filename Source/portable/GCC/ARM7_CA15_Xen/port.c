@@ -163,7 +163,7 @@ portSTACK_TYPE *pxPortInitialiseStack( portSTACK_TYPE *pxTopOfStack, pdTASK_CODE
 }
 /*-----------------------------------------------------------*/
 
-portBASE_TYPE xPortStartScheduler( void )
+BaseType_t xPortStartScheduler( void )
 {
 	unsigned long ulAPSR;
 

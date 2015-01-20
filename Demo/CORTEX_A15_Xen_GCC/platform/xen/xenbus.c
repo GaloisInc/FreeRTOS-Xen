@@ -363,7 +363,7 @@ void arch_init_xenbus(struct xenstore_domain_interface **xenstore_buf, uint32_t 
 /* Initialise xenbus. */
 void init_xenbus(void)
 {
-    portBASE_TYPE ret;
+    BaseType_t ret;
 
     DEBUG("init_xenbus called.\n");
 
@@ -377,7 +377,7 @@ void init_xenbus(void)
 
     DEBUG("init_xenbus: buf = 0x%x, evtchn = %d\n", xenstore_buf, store_evtchn);
 
-    ret = xTaskCreate(xenbus_thread_func, ( signed portCHAR * ) "xenbusTask", 4096,
+    ret = xTaskCreate(xenbus_thread_func, ( portCHAR * ) "xenbusTask", 4096,
 		    NULL, configXENBUS_TASK_PRIORITY, NULL);
     if (ret != pdPASS) {
 	    printk("Error creating xenbus task, status was %d\n", ret);

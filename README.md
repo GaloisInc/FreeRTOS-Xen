@@ -157,6 +157,36 @@ may be relevant to your application:
      used to set the virtual timer's interrupt.
    * `configTOTAL_HEAP_SIZE`: the size of the heap in bytes.
 
+Memory Layout
+-------------
+
+The in-memory layout of the FreeRTOS system is as follows. For
+information, see the linker script, `linker.lds`, and the various
+assembly sources used to boot the system (in particular, `boot.s`).
+The following table lists addresses with increasingly higher values,
+indicating symbolic or numeric addresses where possible. This layout is
+not intended to be exhaustive, but to provide a high-level view of the
+organization of the program.
+
+```
+ Address         Segment     Description
+ ------------------------------------------------------------------------
+ 0x80008000      .start      Start of kernel and execution entry point
+ l1_page_table               Level 1 page table region (see `boot.s`)
+ l2_page_table               Level 2 page table region (see `boot.s`)
+                 .text       Text segments of compiled object code
+                 .rodata     Read-only data
+                 .data       Read-write data
+ _start_stacks               Start of stack region (top of SVC stack)
+ svc_stack                   SVC stack: _start_stacks + 16384
+ irq_stack                   IRQ stack: _start_stacks + 32768
+ firq_stack                  FIQ stack: _start_stacks + 49152
+ abt_stack                   ABT stack: _start_stacks + 65536
+ und_stack                   UND stack: _start_stacks + 81920
+
+                 .bss        BSS region
+```
+
 Future Work & Caveats
 ---------------------
 

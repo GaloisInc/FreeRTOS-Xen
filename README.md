@@ -190,6 +190,10 @@ organization of the program.
 Future Work & Caveats
 ---------------------
 
+The following are known issues, missing features we'd like to implement,
+or security issues we'd like to resolve. If you have the time and
+inclination, feel free to work on these and submit pull requests!
+
  * ARM GIC settings hard-coded: At the time of this writing, some
    hardware details such as the GIC interface addresses and interrupt
    numbers are hard-coded, while the preferred approach to configuring
@@ -218,6 +222,9 @@ Future Work & Caveats
    use of the caches and MMU for mapping grant table entries, but further
    use of virtual memory could be employed to provide per-task virtual
    address spaces.
+
+ * Memory protection for relevant segments: text, rodata, and start
+   segments are not protected in the MMU.
 
 Contributing
 ------------

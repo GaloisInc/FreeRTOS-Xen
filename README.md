@@ -194,6 +194,14 @@ organization of the program.
                  .bss        BSS region
 ```
 
+All addresses in first three gigabytes of virtual memory address space
+are mapped to the equivalent physical memory addresses. The fourth
+gigabyte of virtual address space is initially unmapped and is reserved
+for mapping pages from grant tables. For more information, please see
+
+ * `Demo/CORTEX_A15_Xen_GCC/include/freertos/mmu.h`
+ * `Source/portable/GCC/ARM7_CA15_Xen/mmu.c`
+
 Future Work & Caveats
 ---------------------
 

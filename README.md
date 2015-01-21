@@ -82,8 +82,10 @@ but this distribution includes an example application and Makefile
 in the Example/ directory. Once you've built the FreeRTOS library as
 described in Step 1:
 
+```
   $ cd Example/
   $ make
+```
 
 The resulting Example.bin kernel image can be used to create a virtual
 machine as described in the next section.

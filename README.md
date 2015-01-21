@@ -191,7 +191,6 @@ organization of the program.
  firq_stack                  FIQ stack: _start_stacks + 49152
  abt_stack                   ABT stack: _start_stacks + 65536
  und_stack                   UND stack: _start_stacks + 81920
-
                  .bss        BSS region
 ```
 

@@ -130,9 +130,6 @@ void vConfigureTickInterrupt(void);
 #define configEVENT_IRQ_PRIORITY			configTICK_PRIORITY
 #define configUSE_XEN_CONSOLE                           0
 
-/* MUX settings */
-#define configIVC_TASK_PRIORITY				( configXENBUS_TASK_PRIORITY - 1 )
-
 /* Software timer definitions. */
 #define configUSE_TIMERS				0
 #define configTIMER_TASK_PRIORITY			( configMAX_PRIORITIES - 1 )

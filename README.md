@@ -67,8 +67,8 @@ The two settings specified above are
  * `CROSS_COMPILE`: the string prefix of the cross compiler toolchain's
    program names. DEFAULT: "`arm-none-eabi-`".
 
- * `XEN_PREFIX`: the autoconf-style "prefix" for the location of the   .
-   Xen headers DEFAULT: "`/usr`"                                         .
+ * `XEN_PREFIX`: the autoconf-style "prefix" for the location of the
+   Xen headers. DEFAULT: "`/usr`".
 
 The result of the build process will be `FreeRTOS.a`, the library
 against which your application will be built in step 2.

@@ -203,8 +203,8 @@ organization of the program.
  Address         Segment     Description
  ------------------------------------------------------------------------
  0x80008000      .start      Start of kernel and execution entry point
- l1_page_table               Level 1 page table region (see `boot.s`)
- l2_page_table               Level 2 page table region (see `boot.s`)
+ l1_page_table               Level 1 page table region (see boot.s)
+ l2_page_table               Level 2 page table region (see boot.s)
                  .text       Text segments of compiled object code
                  .rodata     Read-only data
                  .data       Read-write data

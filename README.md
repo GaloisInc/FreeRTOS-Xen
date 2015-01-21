@@ -123,6 +123,40 @@ to a non-zero value. Look for e.g.
   #define dprintk if (DEBUG) printk
 ```
 
+Relevant Configuration Settings
+-------------------------------
+
+The following settings in
+
+```
+Demo/CORTEX_A15_Xen_GCC/include/FreeRTOSConfig.h
+```
+
+may be relevant to your application:
+
+   * `configUSE_XEN_CONSOLE`: if `1`, console output emitted with
+     `printk` goes to the Xen paravirtualized console once it is up. If
+     `0`, the output goes to the Xen "emergency" console instead, via the
+     `HYPERVISOR_console_io` hypercall. Stable systems should set this to
+     `1`; systems under development will be easier to debug if this is set to
+     `0`, in case the console service is not coming up for some reason.
+   * `configINTERRUPT_NESTING`: if `1`, enables interrupts of
+     sufficiently high priority to preempt the execution of lower-priority
+     interrupts. Defaults to `0`.
+   * `configMAX_API_CALL_INTERRUPT_PRIORITY`: the highest interrupt
+     priority from which interrupt safe FreeRTOS API functions can be called.
+     For more information, please see http://www.freertos.org/a00110.html.
+   * `configTICK_PRIORITY`: the priority of the tick interrupt raised by
+     the ARM virtual timer.
+   * `configXENBUS_TASK_PRIORITY`: the priority of the FreeRTOS task
+     responsible for processing Xenbus responses.
+   * `configEVENT_IRQ_PRIORITY`: the interrupt priority of the Xen event
+     notification interrupt.
+   * `configTICK_RATE_HZ_ASM`: the rate in ticks per second of the tick
+     used to drive the FreeRTOS scheduler. This determines the timer interval
+     used to set the virtual timer's interrupt.
+   * `configTOTAL_HEAP_SIZE`: the size of the heap in bytes.
+
 Future Work & Caveats
 ---------------------
 

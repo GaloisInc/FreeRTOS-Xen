@@ -1,11 +1,17 @@
 
+###########################################################
+# Things you probably want to change:
+# The FreeRTOS source path
 FREERTOS=../
+# Where Xen headers are installed
+XEN_PREFIX=/usr
+# The cross compiler name prefix
+CROSS_COMPILE=arm-none-eabi-
+###########################################################
+
 FREERTOS_LIB=$(FREERTOS)/Demo/CORTEX_A15_Xen_GCC/FreeRTOS.a
 PORT=$(FREERTOS)/Source/portable/GCC/ARM7_CA15_Xen
-XEN_PREFIX=/usr
-
 XEN_INCLUDE=$(XEN_PREFIX)/include
-CROSS_COMPILE=arm-none-eabi-
 CC=$(CROSS_COMPILE)gcc
 OBJCOPY=$(CROSS_COMPILE)objcopy
 

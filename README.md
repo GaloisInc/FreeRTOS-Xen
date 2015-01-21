@@ -112,6 +112,27 @@ and then create a domain with `xl create`, e.g.,
   xl create -f .../path/to/domain.cfg
 ```
 
+Using Xen Services
+------------------
+
+This port of FreeRTOS borrows Xenbus, console, grant table, and event
+channel implementations from Mini-OS, modified to work with the FreeRTOS
+scheduler.
+
+ * General setup:
+   * `Demo/CORTEX_A15_Xen_GCC/platform/xen/xen_setup.c`
+ * Xenbus:
+   * `Demo/CORTEX_A15_Xen_GCC/platform/xen/xenbus.c`
+   * `Demo/CORTEX_A15_Xen_GCC/platform/xen/xenbus-arm.c`
+ * Console:
+   * Everything in `Demo/CORTEX_A15_Xen_GCC/platform/console/`
+ * Grant tables:
+   * `Demo/CORTEX_A15_Xen_GCC/platform/xen/gnttab.c`
+   * `map_frames()` in `mmu.c`
+ * Event channels:
+   * `Demo/CORTEX_A15_Xen_GCC/platform/xen/events_setup.c`
+   * `Demo/CORTEX_A15_Xen_GCC/platform/xen/events.c`
+
 Debugging
 ---------
 

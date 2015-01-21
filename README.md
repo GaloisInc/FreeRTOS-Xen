@@ -8,7 +8,8 @@ This FreeRTOS tree provides a port of FreeRTOS for Xen on ARM systems.
  * Xen version: 4.4
  * FreeRTOS version: 7.6.0
  * Supported systems: any ARM system with virtualization extensions
- * Stability: for exploratory use only, see Future Work section
+ * Stability: suggested for exploratory/research use only, see Future
+   Work section
 
 Selected elements of the source tree layout are as follows:
 

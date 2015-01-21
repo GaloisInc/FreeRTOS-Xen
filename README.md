@@ -68,11 +68,17 @@ your application will be built in step 2.
 Step 2: Building an application
 -------------------------------
 
-To build an application with `FreeRTOS.a`, compile it and link it against the
-library.  The details of this process are somewhat tedious, so this
-distribution includes a sample Makefile for this purpose which you can
-customize for your application.  See `Makefile.example` in the root of the
-distribution.
+To build an application with `FreeRTOS.a`, compile it and link it
+against the library. The details of this process are somewhat tedious,
+but this distribution includes an example application and Makefile in
+the Example/ directory. Once you've built the FreeRTOS library as
+described in Step 1:
+
+  $ cd Example/
+  $ make
+
+The resulting Example.bin kernel image can be used to create a virtual
+machine as described in the next section.
 
 Running a FreeRTOS VM
 ---------------------

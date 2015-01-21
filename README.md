@@ -87,7 +87,7 @@ described in Step 1:
   $ make
 ```
 
-The resulting Example.bin kernel image can be used to create a virtual
+The resulting `Example.bin` kernel image can be used to create a virtual
 machine as described in the next section.
 
 Running a FreeRTOS VM

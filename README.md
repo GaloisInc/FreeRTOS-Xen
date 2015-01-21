@@ -238,8 +238,8 @@ inclination, feel free to work on these and submit pull requests!
    use of virtual memory could be employed to provide per-task virtual
    address spaces.
 
- * Memory protection for relevant segments: text, rodata, and start
-   segments are not protected in the MMU.
+ * Memory protection for relevant segments: `text`, `rodata`, and
+   `start` segments are not protected in the MMU.
 
 Contributing
 ------------

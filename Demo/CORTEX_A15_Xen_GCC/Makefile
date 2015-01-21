@@ -86,6 +86,7 @@ CSOURCES= \
 	platform/minlibc/strnlen.c \
 	platform/minlibc/strcmp.c \
 	platform/minlibc/strdup.c \
+	platform/minlibc/strcpy.c \
 	platform/minlibc/printf.c \
 	platform/minlibc/puts.c \
 	platform/minlibc/sscanf.c \

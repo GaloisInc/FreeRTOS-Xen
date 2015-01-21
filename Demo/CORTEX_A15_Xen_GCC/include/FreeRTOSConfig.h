@@ -24,13 +24,6 @@
 #ifndef __ASSEMBLER__
 #include <stdlib.h>
 
-/* Run time stats gathering definitions. */
-unsigned long ulGetRunTimeCounterValue(void);
-void vInitialiseRunTimeStats(void);
-
-#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() vInitialiseRunTimeStats()
-#define portGET_RUN_TIME_COUNTER_VALUE() ulGetRunTimeCounterValue()
-
 /* The size of the global output buffer that is available for use when there
 are multiple command interpreters running at once (for example, one on a UART
 and one on TCP/IP).  This is done to prevent an output buffer being defined by

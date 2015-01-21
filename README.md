@@ -123,6 +123,14 @@ to a non-zero value. Look for e.g.
   #define dprintk if (DEBUG) printk
 ```
 
+If you need to debug system state in assembly regions, some macros are
+available:
+
+ * `_dumpregs` (`dumpregs.s`) may be used to dump the register states
+   for `R0-R12`, `LR`, `SPSR`, and `CPSR`.
+ * `_dumpstack` (`dumpregs.s`) may be used to dump the 8 most recent
+   words on the current stack.
+
 Relevant Configuration Settings
 -------------------------------
 

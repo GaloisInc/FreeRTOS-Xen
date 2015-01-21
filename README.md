@@ -123,16 +123,37 @@ to a non-zero value. Look for e.g.
   #define dprintk if (DEBUG) printk
 ```
 
-Caveats
--------
+Future Work & Caveats
+---------------------
 
-At the time of this writing, this port of FreeRTOS works on Xen 4.4, but
-operation in newer versions of Xen is not guaranteed. In particular,
-some hardware details such as the GIC interface addresses and interrupt
-numbers are hard-coded, while the preferred approach to configuring
-these settings is to query the Device Tree Blob provided by the
-hypervisor. Until that is implemented, operation on newer versions of
-Xen is not recommended.
+ * ARM GIC settings hard-coded: At the time of this writing, some
+   hardware details such as the GIC interface addresses and interrupt
+   numbers are hard-coded, while the preferred approach to configuring
+   these settings is to query the Device Tree Blob provided by the
+   hypervisor. Until that is implemented, operation on newer versions of
+   Xen is not recommended.
+
+ * Testing with real-time Xen: while FreeRTOS itself is suitable for
+   real-time use, running FreeRTOS on Xen requires more investigation
+   because the Xen scheduler will interfere with the real-time behavior of
+   the guest. In particular, testing with Xen's real-time scheduler needs
+   to be done to determine how reliable the guest performs real-time work.
+   In the mean time, near-real-time behavior can be obtained by using CPU
+   pinning to pin the FreeRTOS guest to a single CPU free of other Xen
+   domains.
+
+ * Configurable memory usage: the heap size is currently configurable
+   using the `FreeRTOSConfig.h` setting `configTOTAL_HEAP_SIZE`, but the
+   total available guest domain memory is not known to the guest. As with
+   GIC configuration, this information can be obtained from the ARM device
+   tree, but that work has not been done.
+
+ * Per-task virtual address spaces: at present, only one virtual address
+   space is used for the entire system, and each virtual address is mapped
+   to its equivalent corresponding physical address. This was done to allow
+   use of the caches and MMU for mapping grant table entries, but further
+   use of virtual memory could be employed to provide per-task virtual
+   address spaces.
 
 Contributing
 ------------

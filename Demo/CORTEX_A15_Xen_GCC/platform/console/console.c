@@ -50,11 +50,6 @@
 #include <platform/events.h>
 #include <platform/xenbus.h>
 
-/* Copies all print output to the Xen emergency console apart
-   of standard dom0 handled console */
-#define USE_XEN_CONSOLE
-
-
 /* If console not initialised the printk will be sent to xen serial line 
    NOTE: you need to enable verbose in xen/Rules.mk for it to work. */
 static int console_initialised = 0;

@@ -264,6 +264,10 @@ inclination, feel free to work on these and submit pull requests!
  * Memory protection for relevant segments: `text`, `rodata`, and
    `start` segments are not protected in the MMU.
 
+ * Optimizations are turned off: on some ARM cross compilers, enabling
+   optimizations causes incorrect code generation for some C library
+   routines. Optimizations are therefore disabled by default.
+
 Contributing
 ------------
 

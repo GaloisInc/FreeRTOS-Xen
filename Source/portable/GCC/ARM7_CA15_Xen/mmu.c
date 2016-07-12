@@ -23,9 +23,6 @@
 #include <freertos/mmu.h>
 #include <freertos/asm/mm.h>
 
-#define DEBUG 0
-#define dprintk if (DEBUG) printk
-
 extern uint32_t l1_page_table[L1_ENTRIES];
 extern uint32_t l2_page_table[L2_TOTAL][L2_ENTRIES];
 

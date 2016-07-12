@@ -31,9 +31,6 @@
 #include <platform/console.h>
 #include <freertos/os.h>
 
-#define DEBUG 0
-#define dprintk if (DEBUG) printk
-
 #define active_evtchns(cpu,sh,idx)              \
     ((sh)->evtchn_pending[idx] &                \
      ~(sh)->evtchn_mask[idx])

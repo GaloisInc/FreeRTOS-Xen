@@ -25,9 +25,6 @@
 #include <platform/console.h>
 #include <freertos/popcount.h>
 
-#define GIC_DEBUG 0
-#define dprintk if (GIC_DEBUG) printk
-
 void schedule_timer();
 
 extern unsigned long IRQ_handler;

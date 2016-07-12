@@ -45,14 +45,6 @@ void test_xenbus(void *);
         tmpx < tmpy ? tmpx : tmpy;            \
         })
 
-//#define XENBUS_DEBUG
-#ifdef XENBUS_DEBUG
-#define DEBUG(_f, _a...) \
-    printk("xenbus: " _f , ## _a)
-#else
-#define DEBUG(_f, _a...)    ((void)0)
-#endif
-
 static struct xenstore_domain_interface *xenstore_buf;
 static uint32_t store_evtchn;
 static DECLARE_WAIT_QUEUE_HEAD(xb_waitq);
@@ -211,7 +203,7 @@ static void xenbus_thread_func(void *ign)
     struct xsd_sockmsg msg;
     unsigned prod;
 
-    DEBUG("thread: starting up; xenstore_buf = 0x%x\n", xenstore_buf);
+    dprintk("thread: starting up; xenstore_buf = 0x%x\n", xenstore_buf);
 
     prod = xenstore_buf->rsp_prod;
 
@@ -221,7 +213,7 @@ static void xenbus_thread_func(void *ign)
         while (1) 
         {
             prod = xenstore_buf->rsp_prod;
-            DEBUG("Rsp_cons %d, rsp_prod %d.\n", xenstore_buf->rsp_cons,
+            dprintk("Rsp_cons %d, rsp_prod %d.\n", xenstore_buf->rsp_cons,
                     xenstore_buf->rsp_prod);
             if (xenstore_buf->rsp_prod - xenstore_buf->rsp_cons < sizeof(msg))
                 break;
@@ -230,7 +222,7 @@ static void xenbus_thread_func(void *ign)
                     &msg,
                     MASK_XENSTORE_IDX(xenstore_buf->rsp_cons),
                     sizeof(msg));
-            DEBUG("Msg len %d, %d avail, id %d.\n",
+            dprintk("Msg len %d, %d avail, id %d.\n",
                     msg.len + sizeof(msg),
                     xenstore_buf->rsp_prod - xenstore_buf->rsp_cons,
                     msg.req_id);
@@ -238,7 +230,7 @@ static void xenbus_thread_func(void *ign)
                     sizeof(msg) + msg.len)
                 break;
 
-            DEBUG("Message is good.\n");
+            dprintk("Message is good.\n");
 
             if(msg.type == XS_WATCH_EVENT)
             {
@@ -294,7 +286,7 @@ static void xenbus_thread_func(void *ign)
                     msg.len + sizeof(msg));
                 xenstore_buf->rsp_cons += msg.len + sizeof(msg);
 		req_info[msg.req_id].ready = 1;
-		DEBUG("waking up waiters for request %d\n", msg.req_id);
+		dprintk("waking up waiters for request %d\n", msg.req_id);
                 wake_up(&req_info[msg.req_id].waitq);
             }
         }
@@ -365,7 +357,7 @@ void init_xenbus(void)
 {
     portBASE_TYPE ret;
 
-    DEBUG("init_xenbus called.\n");
+    dprintk("init_xenbus called.\n");
 
     init_waitqueue_head(&xb_waitq);
     init_waitqueue_head(&req_wq);
@@ -375,7 +367,7 @@ void init_xenbus(void)
 
     arch_init_xenbus(&xenstore_buf, &store_evtchn);
 
-    DEBUG("init_xenbus: buf = 0x%x, evtchn = %d\n", xenstore_buf, store_evtchn);
+    dprintk("init_xenbus: buf = 0x%x, evtchn = %d\n", xenstore_buf, store_evtchn);
 
     ret = xTaskCreate(xenbus_thread_func, ( signed portCHAR * ) "xenbusTask", 4096,
 		    NULL, configXENBUS_TASK_PRIORITY, NULL);
@@ -420,7 +412,7 @@ void xb_write(int type, int req_id, xenbus_transaction_t trans_id,
     struct write_req header_req = { &m, sizeof(m) };
 
     xSemaphoreTake(xb_write_sem, portMAX_DELAY);
-    DEBUG("xb_write: started\n");
+    dprintk("xb_write: started\n");
 
     for (r = 0; r < nr_reqs; r++)
         len += req[r].len;
@@ -434,19 +426,19 @@ void xb_write(int type, int req_id, xenbus_transaction_t trans_id,
     /* Wait for the ring to drain to the point where we can send the
        message. */
     prod = xenstore_buf->req_prod;
-    DEBUG("xb_write: prod initially 0x%x\n", prod);
+    dprintk("xb_write: prod initially 0x%x\n", prod);
     if (prod + len - xenstore_buf->req_cons > XENSTORE_RING_SIZE) 
     {
         /* Wait for there to be space on the ring */
-        DEBUG("prod %d, len %d, cons %d, size %d; waiting.\n",
+        dprintk("prod %d, len %d, cons %d, size %d; waiting.\n",
                 prod, len, xenstore_buf->req_cons, XENSTORE_RING_SIZE);
         wait_event(&xb_waitq,
                 xenstore_buf->req_prod + len - xenstore_buf->req_cons <=
                 XENSTORE_RING_SIZE);
-        DEBUG("Back from wait.\n");
+        dprintk("Back from wait.\n");
         prod = xenstore_buf->req_prod;
     }
-    DEBUG("xb_write: prod then 0x%x\n", prod);
+    dprintk("xb_write: prod then 0x%x\n", prod);
 
     /* We're now guaranteed to be able to send the message without
        overflowing the ring.  Do so. */
@@ -457,7 +449,7 @@ void xb_write(int type, int req_id, xenbus_transaction_t trans_id,
         this_chunk = min(cur_req->len - req_off,
                 XENSTORE_RING_SIZE - MASK_XENSTORE_IDX(prod));
 
-	DEBUG("xb_write: copying into ring buffer at 0x%x\n",
+	dprintk("xb_write: copying into ring buffer at 0x%x\n",
 			(char *)xenstore_buf->req + MASK_XENSTORE_IDX(prod));
 
         memcpy((char *)xenstore_buf->req + MASK_XENSTORE_IDX(prod),
@@ -475,7 +467,7 @@ void xb_write(int type, int req_id, xenbus_transaction_t trans_id,
         }
     }
 
-    DEBUG("Complete main loop of xb_write.\n");
+    dprintk("Complete main loop of xb_write.\n");
     BUG_ON(req_off != 0);
     BUG_ON(total_off != len);
     BUG_ON(prod > xenstore_buf->req_cons + XENSTORE_RING_SIZE);
@@ -484,7 +476,7 @@ void xb_write(int type, int req_id, xenbus_transaction_t trans_id,
     wmb();
 
     xenstore_buf->req_prod += len;
-    DEBUG("xb_write: req_prod finally 0x%x\n", xenstore_buf->req_prod);
+    dprintk("xb_write: req_prod finally 0x%x\n", xenstore_buf->req_prod);
 
     xSemaphoreGive(xb_write_sem);
 
@@ -507,9 +499,9 @@ xenbus_msg_reply(int type,
     id = allocate_xenbus_id();
     xb_write(type, id, trans, io, nr_reqs);
 
-    DEBUG("waiting on response to request %d\n", id);
+    dprintk("waiting on response to request %d\n", id);
     wait_event(&req_info[id].waitq, req_info[id].ready);
-    DEBUG("woke up on response to request %d\n", id);
+    dprintk("woke up on response to request %d\n", id);
 
     rmb();
     rep = req_info[id].reply;
@@ -560,7 +552,7 @@ char *xenbus_ls(xenbus_transaction_t xbt, const char *pre, char ***contents)
     int nr_elems, x, i;
     char **res, *msg;
 
-    DEBUG("xenbus_ls: called\n");
+    dprintk("xenbus_ls: called\n");
     repmsg = xenbus_msg_reply(XS_DIRECTORY, xbt, req, ARRAY_SIZE(req));
     msg = errmsg(repmsg);
     if (msg) {
@@ -589,7 +581,7 @@ char *xenbus_read(xenbus_transaction_t xbt, const char *path, char **value)
     struct xsd_sockmsg *rep;
     char *res, *msg;
 
-    DEBUG("xenbus_read: called\n");
+    dprintk("xenbus_read: called\n");
     rep = xenbus_msg_reply(XS_READ, xbt, req, ARRAY_SIZE(req));
     msg = errmsg(rep);
     if (msg) {
@@ -618,7 +610,7 @@ char *xenbus_write(xenbus_transaction_t xbt, const char *path, const char *value
     struct xsd_sockmsg *rep;
     char *msg;
 
-    DEBUG("xenbus_write: called\n");
+    dprintk("xenbus_write: called\n");
     rep = xenbus_msg_reply(XS_WRITE, xbt, req, ARRAY_SIZE(req));
     msg = errmsg(rep);
     if (msg) return msg;
@@ -639,7 +631,7 @@ char* xenbus_watch_path_token( xenbus_transaction_t xbt, const char *path, const
 
     char *msg;
 
-    DEBUG("xenbus_watch_path_token: called\n");
+    dprintk("xenbus_watch_path_token: called\n");
 
     if (!events)
         events = &xenbus_events;
@@ -671,7 +663,7 @@ char* xenbus_unwatch_path_token( xenbus_transaction_t xbt, const char *path, con
 
     char *msg;
 
-    DEBUG("xenbus_unwatch_path_token: called\n");
+    dprintk("xenbus_unwatch_path_token: called\n");
     rep = xenbus_msg_reply(XS_UNWATCH, xbt, req, ARRAY_SIZE(req));
 
     msg = errmsg(rep);
@@ -695,7 +687,7 @@ char *xenbus_rm(xenbus_transaction_t xbt, const char *path)
     struct xsd_sockmsg *rep;
     char *msg;
 
-    DEBUG("xenbus_rm: called\n");
+    dprintk("xenbus_rm: called\n");
     rep = xenbus_msg_reply(XS_RM, xbt, req, ARRAY_SIZE(req));
     msg = errmsg(rep);
     if (msg)
@@ -710,7 +702,7 @@ char *xenbus_get_perms(xenbus_transaction_t xbt, const char *path, char **value)
     struct xsd_sockmsg *rep;
     char *res, *msg;
 
-    DEBUG("xenbus_get_perms: called\n");
+    dprintk("xenbus_get_perms: called\n");
     rep = xenbus_msg_reply(XS_GET_PERMS, xbt, req, ARRAY_SIZE(req));
     msg = errmsg(rep);
     if (msg) {
@@ -736,7 +728,7 @@ char *xenbus_set_perms(xenbus_transaction_t xbt, const char *path, domid_t dom, 
     struct xsd_sockmsg *rep;
     char *msg;
 
-    DEBUG("xenbus_set_perms: called\n");
+    dprintk("xenbus_set_perms: called\n");
 
     snprintf(value, PERM_MAX_SIZE, "%c%hu", perm, dom);
     req[1].len = strlen(value) + 1;
@@ -757,7 +749,7 @@ char *xenbus_transaction_start(xenbus_transaction_t *xbt)
     struct xsd_sockmsg *rep;
     char *err;
 
-    DEBUG("xenbus_transaction_start: called\n");
+    dprintk("xenbus_transaction_start: called\n");
     rep = xenbus_msg_reply(XS_TRANSACTION_START, 0, &req, 1);
     err = errmsg(rep);
     if (err)
@@ -779,7 +771,7 @@ xenbus_transaction_end(xenbus_transaction_t t, int abort, int *retry)
     req.data = abort ? "F" : "T";
     req.len = 2;
 
-    DEBUG("xenbus_transaction_end: called\n");
+    dprintk("xenbus_transaction_end: called\n");
     rep = xenbus_msg_reply(XS_TRANSACTION_END, t, &req, 1);
     err = errmsg(rep);
     if (err) {

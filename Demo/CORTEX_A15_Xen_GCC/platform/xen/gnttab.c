@@ -30,9 +30,6 @@
 #include <platform/hypervisor.h>
 #include <platform/console.h>
 
-#define DEBUG 0
-#define dprintk if (DEBUG) printk
-
 grant_entry_t *gnttab_table;
 static grant_ref_t gnttab_list[NR_GRANT_ENTRIES];
 #ifdef GNT_DEBUG

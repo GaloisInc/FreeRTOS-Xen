@@ -30,9 +30,6 @@
 
 #include <platform/console.h>
 
-#define PORT_DEBUG 0
-#define dprintk if (PORT_DEBUG) printk
-
 /*
  * Starts the first task executing.  This function is necessarily written in
  * assembly code so is implemented in portASM.s.

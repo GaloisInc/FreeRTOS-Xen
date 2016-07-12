@@ -20,6 +20,7 @@
 #include <FreeRTOS.h>
 #include <semphr.h>
 #include <task.h>
+#include <string.h>
 
 #include <stdint.h>
 #include <stdlib.h>

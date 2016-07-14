@@ -21,7 +21,7 @@ OUTPUT_ARCH(arm)
 ENTRY(_start)
 SECTIONS 
 {
-  os_start = 0x80008000;
+  os_start = 0x40008000;
 
   . = os_start;
 

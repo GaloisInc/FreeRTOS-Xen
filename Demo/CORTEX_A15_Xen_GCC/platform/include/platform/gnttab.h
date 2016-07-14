@@ -36,7 +36,7 @@
 // Xen does not automatically add it to the physical memory map of the domain.
 // Since we have to update the physmap ourselves, we could probably use any
 // base address we wanted.
-#define GNTTAB_BASE_PFN (0xb0000000ULL >> PAGE_SHIFT)
+#define GNTTAB_BASE_PFN (0x38000000ULL >> PAGE_SHIFT)
 
 void init_gnttab(void);
 grant_ref_t gnttab_alloc_and_grant(void **map);

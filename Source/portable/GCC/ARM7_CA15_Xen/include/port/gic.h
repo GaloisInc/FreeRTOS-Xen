@@ -55,8 +55,8 @@ void gic_set_priority(unsigned char irq_number, unsigned char priority);
 #define SPURIOUS_IRQ            1023
 
 #define VTIMER_TICK		0x6000000
-#define GICD_BASE		0x2c001000
-#define GICC_BASE		0x2c002000
+#define GICD_BASE		0x3001000 // 0x2c001000
+#define GICC_BASE		0x3002000 // 0x2c002000
 
 #define gicd(offset) (gic.gicd_base + (offset))
 #define gicc(offset) (gic.gicc_base + (offset))

@@ -169,10 +169,10 @@ void * map_frames_direct(unsigned long count, unsigned long *start_mfn)
     start_frame = ((L2_BASE_INDEX + mmu_state.cur_l1_idx) << 8) | mmu_state.next_l2_idx;
 
     for (i = 0; i < count; i++) {
-	cur_va = map_frame(start_frame + i);
+        cur_va = map_frame(start_frame + i);
 
-	if (i == 0)
-	    start_va = cur_va;
+        if (i == 0)
+            start_va = cur_va;
     }
 
     *start_mfn = start_frame;
@@ -193,10 +193,10 @@ void * map_frames(unsigned long *lst, unsigned long count)
         return NULL;
 
     for (i = 0; i < count; i++) {
-	cur_va = map_frame(lst[i]);
+        cur_va = map_frame(lst[i]);
 
-	if (i == 0)
-	    start_va = cur_va;
+        if (i == 0)
+            start_va = cur_va;
     }
 
     return start_va;

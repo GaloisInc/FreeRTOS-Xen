@@ -73,8 +73,6 @@ _start:
 	ldr	r8, =(0x2 +  		/* Section entry */ \
 		      0xc +  		/* C B */ \
 		      (3 << 10) + 	/* Read/write */ \
-		      (1 << 12) +	/* TEX */ \
-		      (1 << 16) +	/* Sharable */ \
 		      (1 << 19))	/* Non-secure */
 
     @ Store the virtual end address of the kernel so we can map enough

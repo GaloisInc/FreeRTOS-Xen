@@ -256,7 +256,7 @@ init_gnttab(void)
     }
 
     gnttab_table = (grant_entry_t *) map_frames(frames, NR_GRANT_FRAMES);
-    printk("Grant table mapped at %p\n", gnttab_table);
+    printk("Grant table mapped at 0x%p\n", gnttab_table);
 }
 
 void

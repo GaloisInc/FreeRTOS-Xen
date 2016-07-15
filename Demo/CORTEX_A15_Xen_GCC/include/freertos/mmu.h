@@ -53,17 +53,17 @@ void mmu_setup(void);
 #define DESC_FAULT          0x0
 
 // Page table descriptor: take the top 22 bits of the page table base address,
-// clear bit 1, set bit 0
-#define _PAGE_TABLE(addr)                 (((addr & (~0x3ff)) & (~0x2)) | 0x1)
+// set bit 0
+#define _PAGE_TABLE(addr)                 ((addr & (~0x3ff)) | 0x1)
 #define DESC_PAGE_TABLE(addr)             (_PAGE_TABLE(addr))
 
 // Section descriptor: given a section (megabyte) number, shift it into the top
-// 12 bits of the descriptor, clear bits 0 and 18, set bit 1.
-#define _SECTION(sec_num)                 (((sec_num << 20) & (~0x1) & (~0x40000)) | 0x2)
+// 12 bits of the descriptor, set bit 1.
+#define _SECTION(sec_num)                 ((sec_num << 20) | 0x2)
 #define DESC_SECTION(sec_num, flags)      (_SECTION(sec_num) | flags)
 
-// Small page descriptor: shift the PFN up 12 bits, clear bit 0, set bit 1.
-#define _SMALL_PAGE(pfn)                  (((pfn << 12) & (~0x1)) | 0x2)
+// Small page descriptor: shift the PFN up 12 bits, set bit 1.
+#define _SMALL_PAGE(pfn)                  ((pfn << 12) | 0x2)
 #define DESC_SMALL_PAGE(pfn, flags)       (_SMALL_PAGE(pfn) | flags)
 
 #define L2_ENTRIES             256

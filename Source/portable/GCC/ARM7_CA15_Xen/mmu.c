@@ -135,7 +135,7 @@ void * map_frame(unsigned long pfn)
 
     dprintk("mmu: free_mappings() = 0x%x\n", free_mappings());
 
-    desc = DESC_SMALL_PAGE(pfn, FLAGS_CACHEABLE | FLAGS_BUFFERABLE);
+    desc = DESC_SMALL_PAGE(pfn, FLAGS_CACHEABLE | FLAGS_BUFFERABLE | SP_FLAGS_READWRITE);
 
     dprintk("mmu: l2[0x%x][0x%x] = 0x%x\n",
 		    mmu_state.cur_l1_idx, mmu_state.next_l2_idx, desc);

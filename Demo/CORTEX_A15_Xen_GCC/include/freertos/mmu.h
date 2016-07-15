@@ -42,6 +42,7 @@ void mmu_setup(void);
 #define FLAGS_BUFFERABLE    (1 << 2)
 #define FLAGS_CACHEABLE     (1 << 3)
 #define FLAGS_READWRITE     ((1 << 10) | (1 << 11))
+#define SP_FLAGS_READWRITE  ((1 << 4) | (1 << 5))
 
 // Set these bits on the TTBR0 register value: IRGN0/1, RGN0/1
 // ((1 << 6) | (1 << 0) | (1 << 4) | (1 << 3))

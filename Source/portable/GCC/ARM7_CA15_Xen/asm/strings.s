@@ -34,6 +34,9 @@
     .globl info_msg5
     .globl info_msg6
     .globl info_msg7
+    .globl info_msg8
+    .globl info_msg9
+    .globl info_msg10
     .globl fpu_enabled
 
 timer_banner:
@@ -66,5 +69,11 @@ info_msg6:
     .asciz " r12 = 0x%.8x    lr = 0x%.8x  cpsr = 0x%.8x\n"
 info_msg7:
     .asciz "spsr = 0x%.8x\n"
+info_msg8:
+    .asciz "ifsr = 0x%.8x\n"
+info_msg9:
+    .asciz "dfsr = 0x%.8x\n"
+info_msg10:
+    .asciz "dfar = 0x%.8x\n"
 fpu_enabled:
     .asciz "FPU enabled\n"

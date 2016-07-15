@@ -59,6 +59,18 @@
     ldr     r0, =info_msg7
     bl      __printk
 
+    mrc     p15, 0, r1, c5, c0, 1 @ Read IFSR into r1
+    ldr     r0, =info_msg8
+    bl      __printk
+
+    mrc     p15, 0, r1, c5, c0, 0 @ Read DFSR into r1
+    ldr     r0, =info_msg9
+    bl      __printk
+
+    mrc     p15, 0, r1, c6, c0, 0 @ Read DFAR into r1
+    ldr     r0, =info_msg10
+    bl      __printk
+
     pop     {r0-r12,lr}
 .endm
 

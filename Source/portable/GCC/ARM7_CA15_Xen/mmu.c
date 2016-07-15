@@ -192,6 +192,8 @@ void * map_frames(unsigned long *lst, unsigned long count)
     if (free_mappings() < count)
         return NULL;
 
+    dprintk("map_frames: mapping %d frames\n", count);
+
     for (i = 0; i < count; i++) {
         cur_va = map_frame(lst[i]);
 

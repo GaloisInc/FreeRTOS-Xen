@@ -62,7 +62,14 @@ void setup_direct_map(void)
 	    // (1:1); use a 1 MB descriptor
 	    desc = DESC_SECTION(i, flags);
 
-	    l1_page_table[i] = desc;
+        // If the page table entry is already present, that's because
+        // boot.s put it there to get the code segment's virtual and
+        // physical address mappings set up. Skip this entry if so.
+        if (l1_page_table[i]) {
+            dprintk("Skipping preexisting L1 page table entry %d\n", i);
+        } else {
+            l1_page_table[i] = desc;
+        }
     }
 
     dprintk("Done setting up direct map\n");
@@ -209,11 +216,6 @@ void mmu_setup(void)
 	setup_mmu_state();
 	setup_direct_map();
 	invalidate_tlb();
-	install_pt_address();
-	printk("Installed page table address\n");
-	set_domain_permissions();
-	printk("Set domain permissions\n");
 	flush_caches();
-	enable_mmu();
 	printk("MMU setup complete.\n");
 }

@@ -44,5 +44,7 @@ void arch_init_xenbus(struct xenstore_domain_interface **xenstore_buf, uint32_t 
 
 	printk("arch_init_xenbus: xenstore pfn = %llu\n", xenstore_pfn);
 
-	*xenstore_buf = (struct xenstore_domain_interface *) map_frame(xenstore_pfn);
+    // Just convert to an equivalent VA because we use a direct mapping
+    // for most 1MB sections.
+	*xenstore_buf = (struct xenstore_domain_interface *) ((void*)((uint32_t)xenstore_pfn << 12));
 }

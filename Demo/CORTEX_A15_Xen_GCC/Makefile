@@ -106,8 +106,7 @@ ASOURCES= \
 	  $(PORT)/asm/strings.s \
 	  $(PORT)/asm/ldivmod.s \
 	  $(PORT)/asm/tlb.s \
-	  $(PORT)/asm/cache.s \
-	  $(PORT)/asm/pt.s
+	  $(PORT)/asm/cache.s
 
 OTHER_A= \
        $(PORT)/asm/print.s \

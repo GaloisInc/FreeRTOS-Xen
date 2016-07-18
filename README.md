@@ -145,20 +145,19 @@ Debugging
 ---------
 
 Many modules in the distribution provide extra Xen console output for
-debugging purposes. The convention for enabling such debugging output is
-to edit relevant source files and set a `#define`'d "`DEBUG`" constant
-to a non-zero value. Look for e.g.
+debugging purposes. To enable such debugging output, declare a `DEBUG`
+constant at compile time:
 
 ```
-  #define DEBUG 0
-  #define dprintk if (DEBUG) printk
+  $ make -DDEBUG=1 ...
 ```
 
 If you need to debug system state in assembly regions, some macros are
 available:
 
  * `_dumpregs` (`dumpregs.s`) may be used to dump the register states
-   for `R0-R12`, `LR`, `SPSR`, and `CPSR`.
+   for `R0-R12`, `LR`, `SPSR`, `CPSR`, and other useful system
+   registers.
  * `_dumpstack` (`dumpregs.s`) may be used to dump the 8 most recent
    words on the current stack.
 
@@ -210,7 +209,7 @@ organization of the program.
 ```
  Address         Segment     Description
  ------------------------------------------------------------------------
- 0x80008000      .start      Start of kernel and execution entry point
+ (start)         .start      Start of kernel and execution entry point
  l1_page_table               Level 1 page table region (see boot.s)
  l2_page_table               Level 2 page table region (see boot.s)
                  .text       Text segments of compiled object code
@@ -226,9 +225,30 @@ organization of the program.
 ```
 
 All addresses in first three gigabytes of virtual memory address space
-are mapped to the equivalent physical memory addresses. The fourth
-gigabyte of virtual address space is initially unmapped and is reserved
-for mapping pages from grant tables. For more information, please see
+are mapped to the equivalent physical memory addresses (PA == VA). This
+mapping is set up by mmu.c in the function `setup_direct_map`. The only
+exceptions to this rule are:
+
+ * The physical addresses of the 1MB regions containing the kernel
+   binary
+ * The virtual addresses of the 1MB regions containing the kernel
+   binary
+
+The virtual address of the kernel is determined by the start address
+set by the linker script. Although the specific start address is not
+important, what is important is that the kernel is aware that it is
+probably not running at the desired virtual address at startup. We don't
+know where Xen will place the kernel in physical memory. We only know
+that it will be placed near the start of RAM. To deal with this, the
+kernel determines the difference between its actual start address and
+its virtual address, and sets up the MMU with mappings so that both
+its physical and virtual start addresses map to the physical memory
+containing the kernel. This technique was borrowed from Mini-OS since it
+has the same requirement.
+
+The fourth gigabyte of virtual address space is initially unmapped and
+is reserved for mapping pages from grant tables and libIVC. For more
+information, please see
 
  * `Demo/CORTEX_A15_Xen_GCC/include/freertos/mmu.h`
  * `Source/portable/GCC/ARM7_CA15_Xen/mmu.c`

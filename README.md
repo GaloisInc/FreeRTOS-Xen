@@ -5,7 +5,7 @@ FreeRTOS for Xen on ARM
 This FreeRTOS tree provides a port of FreeRTOS for Xen on ARM systems.
 
  * Author: Jonathan Daugherty (jtd AT galois.com), Galois, Inc.
- * Xen version: 4.4
+ * Xen version: 4.7
  * FreeRTOS version: 7.6.0
  * Supported systems: any ARM system with virtualization extensions
  * Stability: suggested for exploratory/research use only, see Future
@@ -144,9 +144,10 @@ scheduler.
 Debugging
 ---------
 
-Many modules in the distribution provide extra Xen console output for
-debugging purposes. To enable such debugging output, declare a `DEBUG`
-constant at compile time:
+Many modules in the distribution provide extra Xen emergency console
+output for debugging purposes. To enable such debugging output so that
+it bypasses the Xen paravirtualized console and makes direct hypercalls
+instead, declare a `DEBUG` constant at compile time:
 
 ```
   $ make -DDEBUG=1 ...

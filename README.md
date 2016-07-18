@@ -45,7 +45,7 @@ To make use of this distribution, you will need:
    distribution as `arm-none-eabi-gcc`)
  * A standard Linux development system (i.e. with GNU `make`)
  * An ARM system capable of running Xen:
-   http://www.xenproject.org/developers/teams/arm-hypervisor.html
+   http://wiki.xen.org/wiki/Xen_ARM_with_Virtualization_Extensions#Hardware
 
 Step 1: Building the core
 -------------------------

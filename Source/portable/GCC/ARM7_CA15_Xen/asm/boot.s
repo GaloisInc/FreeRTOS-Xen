@@ -29,6 +29,7 @@
     .globl    _start
     .globl    l1_page_table
     .globl    l2_page_table
+    .globl    physical_address_offset
 
 _start:
     @ zImage header
@@ -55,8 +56,9 @@ _start:
     ldr	    r7, =l1_page_table	@ r7 = (desired) virtual addr of translation table
     add	    r1, r7, r9		    @ r1 = physical addr of translation table
 
-    @ Save the DTB pointer
+    @ Save the DTB pointer and address offset
     mov     r10, r2
+    mov     r11, r9
 
     @ Set the page table base address register
 	// orr	r0, r1, #0b0001011	@ Sharable, Inner/Outer Write-Back Write-Allocate Cacheable
@@ -179,6 +181,10 @@ call_main:
 
     bl     fpu_enable
 
+    @ Store the address offset in a global
+    ldr    r0, =physical_address_offset
+    str    r11, [r0]
+
     mov    r0, r10
     bl     gic_init
     bl     platform_setup
@@ -192,6 +198,10 @@ __exit:
     b      .
 
     .section ".data"
+.align 2
+physical_address_offset:
+    .word 0x0
+
 .align  14
 l1_page_table:
     .fill (4*1024), 4, 0x0

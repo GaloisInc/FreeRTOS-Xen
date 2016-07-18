@@ -26,6 +26,7 @@ void * map_frames(unsigned long *lst, unsigned long count);
 void * map_frame(unsigned long pfn);
 void * map_frames_direct(unsigned long count, unsigned long *start_mfn);
 void mmu_setup(void);
+extern uint32_t physical_address_offset;
 #endif
 
 // Set up 1MB descriptors for the 1 MB sections with these page table indices.
@@ -54,7 +55,7 @@ void mmu_setup(void);
 
 // Page table descriptor: take the top 22 bits of the page table base address,
 // set bit 0
-#define _PAGE_TABLE(addr)                 ((addr & (~0x3ff)) | 0x1)
+#define _PAGE_TABLE(addr)                 (((addr) & (~0x3ff)) | 0x1)
 #define DESC_PAGE_TABLE(addr)             (_PAGE_TABLE(addr))
 
 // Section descriptor: given a section (megabyte) number, shift it into the top

@@ -107,7 +107,7 @@ static int alloc_l2()
     dprintk("mmu: alloc_l2 using 0x%x as l2 page table base address for cur_l1_idx = 0x%x\n",
 		    addr, mmu_state.cur_l1_idx);
 
-    desc = DESC_PAGE_TABLE((uint32_t)addr);
+    desc = DESC_PAGE_TABLE((uint32_t)addr + physical_address_offset);
 
     dprintk("mmu: l1[0x%x + 0x%x] = 0x%x\n", L2_BASE_INDEX, mmu_state.cur_l1_idx, desc);
 

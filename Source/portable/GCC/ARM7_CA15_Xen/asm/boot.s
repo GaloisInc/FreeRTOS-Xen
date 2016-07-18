@@ -101,7 +101,7 @@ _start:
 
     @ Advance the virtual mapping address by 1MB
     add r4, r4, #1<<20
-    @ Advance the phsyical address by 1MB
+    @ Advance the physical address by 1MB
     add r0, r0, #1
     @ Compare the virtual address mapped to the virtual _end; If the
     @ address we just mapped is before end of the kernel, we have more

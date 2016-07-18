@@ -20,6 +20,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <libfdt.h>
 #include <port/gic.h>
 #include <portmacro.h>
 #include <platform/console.h>
@@ -27,14 +28,9 @@
 
 void schedule_timer();
 
+struct gic_info gic;
+
 extern unsigned long IRQ_handler;
-
-struct gic {
-	volatile char *gicd_base;
-	volatile char *gicc_base;
-};
-
-static struct gic gic;
 
 uint32_t ulGICUniqueIntPriorities;
 uint32_t ulPriorityShift;
@@ -156,7 +152,7 @@ static void gic_disable_interrupts()
 	REG_WRITE32(REG(gicd(GICD_CTLR)), 0x00000000);
 }
 
-static void gic_cpu_set_priority_mask(char priority)
+void gic_cpu_set_priority_mask(char priority)
 {
 	REG_WRITE32(REG(gicc(GICC_PMR)), priority & 0x000000FF);
 }
@@ -225,17 +221,67 @@ int gic_register_handler(uint32_t irq, void (*h)(uint32_t))
 	return 0;
 }
 
-void gic_init(void) {
-	int i;
+void gic_find_base_addrs(void *device_tree)
+{
+    int node = 0;
+    int depth = 0;
+    for (;;)
+    {
+        node = fdt_next_node(device_tree, node, &depth);
+        if (node <= 0 || depth < 0)
+            break;
+
+        if (fdt_getprop(device_tree, node, "interrupt-controller", NULL)) {
+            int len = 0;
+
+            if (fdt_node_check_compatible(device_tree, node, "arm,cortex-a15-gic") &&
+                fdt_node_check_compatible(device_tree, node, "arm,cortex-a7-gic")) {
+                printk("Skipping incompatible interrupt-controller node\n");
+                continue;
+            }
+
+            const uint64_t *reg = fdt_getprop(device_tree, node, "reg", &len);
+
+            /* We have two registers (GICC and GICD), each of which contains
+             * two parts (an address and a size), each of which is a 64-bit
+             * value (8 bytes), so we expect a length of 2 * 2 * 8 = 32.
+             * If any extra values are passed in future, we ignore them. */
+            if (reg == NULL || len < 32) {
+                printk("Bad 'reg' property: %p %d\n", reg, len);
+                continue;
+            }
+
+            gic.gicd_base = (void *) ((long)fdt64_to_cpu(reg[0]));
+            gic.gicc_base = (void *) ((long)fdt64_to_cpu(reg[2]));
+            printk("Found GIC: gicd_base = %p, gicc_base = %p\n", gic.gicd_base, gic.gicc_base);
+            break;
+        }
+    }
+
+    if (!gic.gicd_base) {
+        printk("GIC not found!\n");
+        BUG();
+    }
+
+    wmb();
+}
+
+void gic_init(void * device_tree_vaddr) {
+	int i, r;
+
+	printk("device_tree_vaddr = 0x%x\n", device_tree_vaddr);
+    if ((r = fdt_check_header(device_tree_vaddr))) {
+        printk("Invalid DTB from Xen: %s\n", fdt_strerror(r));
+    } else {
+        printk("Valid DTB pointer\n");
+    }
 
 	printk("Enabling GIC ...\n");
 
+    gic_find_base_addrs(device_tree_vaddr);
+
 	for (i = 0; i < NUM_IRQS; i++)
 		handlers[i] = gic_default_handler;
-
-	gic.gicd_base = (char *)GICD_BASE;
-	gic.gicc_base = (char *)GICC_BASE;
-	wmb();
 
 	gic_disable_interrupts();
 

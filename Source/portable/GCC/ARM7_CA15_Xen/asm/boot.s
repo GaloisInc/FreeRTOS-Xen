@@ -51,9 +51,12 @@ _start:
     adr	    r1, _start		    @ r1 = physical address of _start
     ldr	    r3, =_start		    @ r3 = (desired) virtual address of _start
     sub 	r9, r1, r3		    @ r9 = (physical - virtual) offset
-    
+
     ldr	    r7, =l1_page_table	@ r7 = (desired) virtual addr of translation table
     add	    r1, r7, r9		    @ r1 = physical addr of translation table
+
+    @ Save the DTB pointer
+    mov     r10, r2
 
     @ Set the page table base address register
 	// orr	r0, r1, #0b0001011	@ Sharable, Inner/Outer Write-Back Write-Allocate Cacheable
@@ -175,6 +178,8 @@ call_main:
     cpsid  i
 
     bl     fpu_enable
+
+    mov    r0, r10
     bl     gic_init
     bl     platform_setup
 
@@ -187,7 +192,6 @@ __exit:
     b      .
 
     .section ".data"
-
 .align  14
 l1_page_table:
     .fill (4*1024), 4, 0x0

@@ -60,6 +60,13 @@ requires the presence of Xen development headers to be installed
 somewhere on your system. Given both of those details, the build process
 for building the core FreeRTOS library is as follows:
 
+Step 1: fetch dependencies:
+```
+  $ cd FreeRTOS
+  $ bash setup.sh
+```
+
+Step 2: build the core library:
 ```
   $ cd FreeRTOS/Demo/CORTEX_A15_Xen_GCC
   $ make CROSS_COMPILE=... XEN_PREFIX=...
@@ -232,13 +239,6 @@ Future Work & Caveats
 The following are known issues, missing features we'd like to implement,
 or security issues we'd like to resolve. If you have the time and
 inclination, feel free to work on these and submit pull requests!
-
- * ARM GIC settings hard-coded: At the time of this writing, some
-   hardware details such as the GIC interface addresses and interrupt
-   numbers are hard-coded, while the preferred approach to configuring
-   these settings is to query the Device Tree Blob provided by the
-   hypervisor. Until that is implemented, operation on newer versions of
-   Xen is not recommended.
 
  * Testing with real-time Xen: while FreeRTOS itself is suitable for
    real-time use, running FreeRTOS on Xen requires more investigation

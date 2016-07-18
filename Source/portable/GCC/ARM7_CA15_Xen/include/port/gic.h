@@ -18,6 +18,9 @@
  *
  */
 
+#ifndef GIC_H
+#define GIC_H
+
 #ifndef __ASSEMBLER__
 #include <stdint.h>
 
@@ -29,6 +32,14 @@ void gic_enable_event_irq(void);
 void gic_enable_vtimer_irq(void);
 int gic_register_handler(uint32_t irq, void (*)(uint32_t));
 
+struct gic_info {
+	volatile char *gicd_base;
+	volatile char *gicc_base;
+};
+
+extern struct gic_info gic;
+
+void gic_cpu_set_priority_mask(char priority);
 void gic_enable_interrupt(unsigned char irq_number, unsigned char cpu_set,
         unsigned char level_sensitive, unsigned char ppi);
 void gic_set_priority(unsigned char irq_number, unsigned char priority);
@@ -55,8 +66,6 @@ void gic_set_priority(unsigned char irq_number, unsigned char priority);
 #define SPURIOUS_IRQ            1023
 
 #define VTIMER_TICK		0x6000000
-#define GICD_BASE		0x3001000 // 0x2c001000
-#define GICC_BASE		0x3002000 // 0x2c002000
 
 #define gicd(offset) (gic.gicd_base + (offset))
 #define gicc(offset) (gic.gicc_base + (offset))
@@ -66,3 +75,5 @@ void gic_set_priority(unsigned char irq_number, unsigned char priority);
 #define mb()			__asm__("dmb");
 #define rmb()			__asm__("dmb");
 #define wmb()			__asm__("dmb");
+
+#endif

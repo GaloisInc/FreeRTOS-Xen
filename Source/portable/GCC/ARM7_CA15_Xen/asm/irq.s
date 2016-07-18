@@ -19,6 +19,7 @@
  */
 
 #include "portmacro.h"
+#include <port/gic.h>
 #include "print.s"
 #include "dumpregs.s"
 #include "arm_modes.s"
@@ -99,15 +100,14 @@
 	STR		R1, [R0]
 
 	/* Ensure the priority mask is correct for the critical nesting depth */
-	LDR		R2, =portICCPMR_PRIORITY_MASK_REGISTER_ADDRESS
         MOV             R5, #configMAX_API_CALL_INTERRUPT_PRIORITY
         LDR             R6, =portPRIORITY_SHIFT
 	LDR		R6, [R6]
         LSL             R5, R5, R6
 	CMP		R1, #0
-	MOVEQ	        R4, #255
-	MOVNE	        R4, R5
-	STR		R4, [r2]
+	MOVEQ	        R0, #255
+	MOVNE	        R0, R5
+    bl      gic_cpu_set_priority_mask
 
 	/* Restore all system mode registers other than the SP (which is
 	 * already being used) */

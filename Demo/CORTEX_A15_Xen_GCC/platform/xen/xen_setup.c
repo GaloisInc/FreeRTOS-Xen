@@ -29,6 +29,8 @@
 #include <platform/gnttab.h>
 #include <port/gic.h>
 
+#include <libfdt.h>
+
 union start_info_union start_info_union;
 shared_info_t *HYPERVISOR_shared_info;
 extern char shared_info_page[PAGE_SIZE];

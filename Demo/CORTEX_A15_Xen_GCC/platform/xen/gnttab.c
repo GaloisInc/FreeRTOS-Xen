@@ -157,18 +157,6 @@ gnttab_end_transfer(grant_ref_t ref)
     return frame;
 }
 
-grant_ref_t
-gnttab_alloc_and_grant(void **map)
-{
-    unsigned long mfn;
-    grant_ref_t gref;
-
-    *map = pvPortMalloc(PAGE_SIZE);
-    mfn = virt_to_mfn(*map);
-    gref = gnttab_grant_access(0, mfn, 0);
-    return gref;
-}
-
 const char *
 gnttabop_error(int16_t status)
 {

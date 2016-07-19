@@ -29,15 +29,6 @@
 #define NR_GRANT_FRAMES 4
 #define NR_GRANT_ENTRIES (NR_GRANT_FRAMES * PAGE_SIZE / sizeof(grant_entry_t))
 
-// This constant is taken from the arch-arm header from Xen; officially, if we
-// want to use this base address, we should read it from the device tree which
-// Xen gives us, but for now we use this since we don't have a device tree
-// implementation.  In addition, it seems like this address is arbitrary since
-// Xen does not automatically add it to the physical memory map of the domain.
-// Since we have to update the physmap ourselves, we could probably use any
-// base address we wanted.
-#define GNTTAB_BASE_PFN (0x38000000ULL >> PAGE_SHIFT)
-
 void init_gnttab(void);
 grant_ref_t gnttab_grant_access(domid_t domid, unsigned long frame,
 				int readonly);

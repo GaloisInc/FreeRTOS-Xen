@@ -30,6 +30,7 @@
     .globl    l1_page_table
     .globl    l2_page_table
     .globl    physical_address_offset
+    .globl    device_tree
 
 _start:
     @ zImage header
@@ -185,7 +186,10 @@ call_main:
     ldr    r0, =physical_address_offset
     str    r11, [r0]
 
-    mov    r0, r10
+    @ Store the device tree virtual address
+    ldr    r0, =device_tree
+    str    r10, [r0]
+
     bl     gic_init
     bl     platform_setup
 
@@ -200,6 +204,10 @@ __exit:
     .section ".data"
 .align 2
 physical_address_offset:
+    .word 0x0
+
+.align 2
+device_tree:
     .word 0x0
 
 .align  14

@@ -22,11 +22,13 @@
 #define _MMU_H
 
 #ifndef __ASSEMBLER__
+#include <stdint.h>
 void * map_frames(unsigned long *lst, unsigned long count);
 void * map_frame(unsigned long pfn);
 void * map_frames_direct(unsigned long count, unsigned long *start_mfn);
 void mmu_setup(void);
 extern uint32_t physical_address_offset;
+extern void * device_tree;
 #endif
 
 // Set up 1MB descriptors for the 1 MB sections with these page table indices.

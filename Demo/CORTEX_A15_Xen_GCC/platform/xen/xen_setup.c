@@ -56,17 +56,43 @@ void init_shared_info()
     HYPERVISOR_shared_info = (struct shared_info *)shared_info_page;
 }
 
-void map_grant_table()
+static uint64_t get_gnttab_base(void *device_tree)
+{
+    int hypervisor;
+    int len = 0;
+    const uint64_t *regs;
+    uint64_t gnttab_base;
+
+    hypervisor = fdt_node_offset_by_compatible(device_tree, -1, "xen,xen");
+    BUG_ON(hypervisor < 0);
+
+    regs = fdt_getprop(device_tree, hypervisor, "reg", &len);
+    /* The property contains the address and size, 8-bytes each. */
+    if (regs == NULL || len < 16) {
+        printk("Bad 'reg' property: %p %d\n", regs, len);
+        while (1) {};
+    }
+
+    gnttab_base = fdt64_to_cpu(regs[0]);
+
+    printk("FDT suggests grant table base 0x%llx\n", (unsigned long long) gnttab_base);
+
+    return gnttab_base;
+}
+
+void map_grant_table(void *device_tree)
 {
     struct xen_add_to_physmap xatp;
     int i;
+
+    gnttab_table = (void*)(uint32_t)get_gnttab_base(device_tree);
 
     /* Map grant table pages */
     for (i = (NR_GRANT_FRAMES - 1); i >= 0; i--) {
 	    xatp.domid = DOMID_SELF;
 	    xatp.idx = i;
 	    xatp.space = XENMAPSPACE_grant_table;
-	    xatp.gpfn = GNTTAB_BASE_PFN + i;
+	    xatp.gpfn = ((uint32_t)gnttab_table >> PAGE_SHIFT) + i;
 
 	    if (HYPERVISOR_memory_op(XENMEM_add_to_physmap, &xatp) != 0) {
 		    printk("xen_setup: failed to map grant table page %d\n", i);
@@ -75,18 +101,16 @@ void map_grant_table()
 		    printk("xen_setup: mapped grant table page %d\n", i);
 	    }
     }
-
-    gnttab_table = (grant_entry_t *) (GNTTAB_BASE_PFN << PAGE_SHIFT);
 }
 
-void xen_setup()
+void xen_setup(void *device_tree)
 {
     printk("xen_setup: setting up shared info\n");
     init_shared_info();
     printk("xen_setup: setting up console\n");
     init_console();
     printk("xen_setup: setting up grant table\n");
-    map_grant_table();
+    map_grant_table(device_tree);
     init_gnttab();
     printk("xen_setup: setting up events system\n");
     init_events();

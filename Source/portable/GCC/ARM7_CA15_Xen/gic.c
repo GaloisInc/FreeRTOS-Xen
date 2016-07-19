@@ -25,6 +25,7 @@
 #include <portmacro.h>
 #include <platform/console.h>
 #include <freertos/popcount.h>
+#include <freertos/mmu.h>
 
 void schedule_timer();
 
@@ -266,11 +267,11 @@ void gic_find_base_addrs(void *device_tree)
     wmb();
 }
 
-void gic_init(void * device_tree_vaddr) {
+void gic_init(void) {
 	int i, r;
 
-	printk("device_tree_vaddr = 0x%x\n", device_tree_vaddr);
-    if ((r = fdt_check_header(device_tree_vaddr))) {
+	printk("device_tree = 0x%x\n", device_tree);
+    if ((r = fdt_check_header(device_tree))) {
         printk("Invalid DTB from Xen: %s\n", fdt_strerror(r));
     } else {
         printk("Valid DTB pointer\n");
@@ -278,7 +279,7 @@ void gic_init(void * device_tree_vaddr) {
 
 	printk("Enabling GIC ...\n");
 
-    gic_find_base_addrs(device_tree_vaddr);
+    gic_find_base_addrs(device_tree);
 
 	for (i = 0; i < NUM_IRQS; i++)
 		handlers[i] = gic_default_handler;

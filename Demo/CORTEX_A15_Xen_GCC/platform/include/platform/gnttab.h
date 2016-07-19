@@ -39,7 +39,6 @@
 #define GNTTAB_BASE_PFN (0x38000000ULL >> PAGE_SHIFT)
 
 void init_gnttab(void);
-grant_ref_t gnttab_alloc_and_grant(void **map);
 grant_ref_t gnttab_grant_access(domid_t domid, unsigned long frame,
 				int readonly);
 int gnttab_map_ref(domid_t domid, grant_ref_t ref, unsigned long mfn);

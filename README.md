@@ -4,6 +4,8 @@ FreeRTOS for Xen on ARM
 
 This FreeRTOS tree provides a port of FreeRTOS for Xen on ARM systems.
 
+**This project is not currently maintained. Use at your own risk.**
+
  * Author: Jonathan Daugherty (jtd AT galois.com), Galois, Inc.
  * Xen version: 4.7
  * FreeRTOS version: 7.6.0
